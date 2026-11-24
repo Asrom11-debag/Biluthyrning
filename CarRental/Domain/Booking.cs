@@ -1,11 +1,8 @@
-﻿
-using System.Security.Cryptography.X509Certificates;
-
-using CarRental.Pricing;
+﻿using CarRental.Pricing;
 
 namespace CarRental.Domain
 {
-    // Representerar en bokning som kopplar ihop kund, fordon, period och pris
+    // Bokning som kopplar ihop kund, bil, hyrperiod och pris
     public class Booking
     {
         public int Id { get; }
@@ -38,7 +35,7 @@ namespace CarRental.Domain
         // Hämtar totalpriset från prisobjektet
         public decimal TotalPrice { get { return Cost.GetPrice(); } }
 
-        // Avbokar bokningen om den inte redan är avbokad
+        // Avbokar bokningen om den fortfarande är aktiv
         public void Cancel()
         {
             if (!IsActive)
@@ -46,7 +43,7 @@ namespace CarRental.Domain
             Status = BookingStatus.Cancelled;
         }
 
-        // Skapar ett formaterat kvitto för bokningen
+        // Skriver ut ett kvitto med alla detaljer och totalpris
         public string GetReceipt()
         {
             string statusText = GetStatusText();
