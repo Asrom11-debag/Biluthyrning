@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CarRental.Domain;
 
 namespace CarRental.Pricing
 {
-    internal class IPricingStrategy
+    public interface IPricingStrategy
     {
+        string Name { get; }
+        string Description { get; }
+        decimal CalculateBasePrice(Vehicle vehicle, RentalPeriod period);
     }
 }
