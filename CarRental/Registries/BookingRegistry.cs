@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarRental.Registries
 {
-    public class BookingRegisty
+    public class BookingRegistry
     {
         private readonly Dictionary<int, Booking> bookingById = new Dictionary<int, Booking>(); // id -> boking 
         private readonly Dictionary<string, List<Booking>> scheduleByVehicle = new Dictionary<string, List<Booking>>(); // trgnr -> sorterat scheam 
