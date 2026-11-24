@@ -1,27 +1,73 @@
 ﻿
 using System.Security.Cryptography.X509Certificates;
 
-///<summary>
-/// Representerar en elbil.Ärver grundegenskaper från Vechicle (Arv).
-/// </summary>
-public class ElectricCar : Vehicle
-{
-   // Skickar vidare renummer och modell till basklassen konstruktor för validering
-  public ElectricCar(string regNumber, string model) 
-     : base(regNumber, model)
-  {
-  }
+using CarRental.Pricing;
 
-  /// Överskuggar (override) basklassens egenskaper med värden specifika för en elbil
-  public override VehicleType Type { get { return VehicleType.Electric; } } 
-  public override string TypeName { get {return "Elbil"; } }
-  public override decimal DailyRate { get { return 595m; } }
-  public override int seats{ get { return 5; } }
-        
- 
-  //Polymorfism: Ger elbilen en egen implementation av Getfetures()
-  public override string GetFeatures()
-  {
-        return "Laddkabel ingår, räckvidd ca 400km.";
-  }
+namespace CarRental.Domain
+{
+    // Representerar en bokning som kopplar ihop kund, fordon, period och pris
+    public class Booking
+    {
+        public int Id { get; }
+        public Customer Customer { get; }
+        public Vehicle Vehicle { get; }
+        public RentalPeriod Period { get; }
+        public IRentalCost Cost { get; }
+        public BookingStatus Status { get; private set; } // Kan bara ändras via Cancel()
+
+        public Booking(int id, Customer customer, Vehicle vehicle, RentalPeriod period, IRentalCost cost)
+        {
+            Id = id;
+            if (customer == null)
+                throw new ArgumentNullException("customer");
+            Customer = customer;
+            if (vehicle == null)
+                throw new ArgumentNullException("vehicle");
+            Vehicle = vehicle;
+            if (period == null)
+                throw new ArgumentNullException("period");
+            Period = period;
+            if (cost == null)
+                throw new ArgumentNullException("cost");
+            Cost = cost;
+            Status = BookingStatus.Active;
+        }
+
+        public bool IsActive { get { return Status == BookingStatus.Active; } }
+
+        // Hämtar totalpriset från prisobjektet
+        public decimal TotalPrice { get { return Cost.GetPrice(); } }
+
+        // Avbokar bokningen om den inte redan är avbokad
+        public void Cancel()
+        {
+            if (!IsActive)
+                throw new InvalidOperationException($"Bokning {Id} är redan avbokad.");
+            Status = BookingStatus.Cancelled;
+        }
+
+        // Skapar ett formaterat kvitto för bokningen
+        public string GetReceipt()
+        {
+            string statusText = GetStatusText();
+            return $"Bokning {Id} [{statusText}]\n" +
+                   $"  {Customer}\n" +
+                   $"  Period: {Period}\n" +
+                   $"  {Cost.GetDescription()}\n" +
+                   $"  TOTALT: {TotalPrice:0.00} kr";
+        }
+
+        private string GetStatusText()
+        {
+            if (IsActive)
+                return "Aktiv";
+            return "Avbokad";
+        }
+
+        public override string ToString()
+        {
+            string statusText = GetStatusText();
+            return $"#{Id,-3} {Vehicle.RegNumber,-7} {Period}  {TotalPrice,9:0.00} kr  {statusText}";
+        }
+    }
 }
