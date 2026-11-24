@@ -13,8 +13,8 @@ public class ElectricCar : Vehicle
   }
 
   /// Överskuggar (override) basklassens egenskaper med värden specifika för en elbil
-  public override VechileType Type { get { return VechileType.Electric; } } 
-  public override string TypeName {get {return "Elbil"; } }
+  public override VehicleType Type { get { return VehicleType.Electric; } } 
+  public override string TypeName { get {return "Elbil"; } }
   public override decimal DailyRate { get { return 595m; } }
   public override int seats{ get { return 5; } }
         
