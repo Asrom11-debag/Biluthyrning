@@ -1,12 +1,12 @@
-﻿using CarRental.Algorithms;                                 // Det vi testar
-using CarRental.Domain;                                     // Bilar, kunder, bokningar
-using CarRental.Pricing;                                    // Behövs för att skapa ett pris
-using CarRental.Registries;                                 // Bokningsregistret
-using Xunit;                                                // Testverktyget
+﻿using CarRental.Algorithms;                                 
+using CarRental.Domain;                                     
+using CarRental.Pricing;                                    
+using CarRental.Registries;                                 
+using Xunit;                                                
 
-namespace CarRental.Tests                                   // Alla tester ligger här
+namespace CarRental.Tests                                   
 {
-    /// <summary>Testar binärsökningen och sorteringen.</summary>
+    ///Testar binärsökningen och sorteringen.
     public class AlgorithmTests
     {
         private static readonly DateTime Today = DateTime.Today;           // Dagens datum
@@ -17,7 +17,7 @@ namespace CarRental.Tests                                   // Alla tester ligge
 
         private void AddBooking(BookingRegistry registry, int from, int to) // Lägger in en bokning
         {
-            RentalPeriod period = P(from, to);              // Vilka dagar
+            RentalPeriod period = P(from, to);              
             registry.CreateBooking(customer, car, period, new BaseRentalCost(car, period, new StandardPricing())); // Boka bilen
         }
 
@@ -26,8 +26,8 @@ namespace CarRental.Tests                                   // Alla tester ligge
             BookingRegistry registry = new BookingRegistry(); // Tomt från början
             AddBooking(registry, 20, 25);                   // Lägger in dem huller om buller
             AddBooking(registry, 2, 5);                     // för att se att de
-            AddBooking(registry, 10, 14);                   // ändå hamnar i rätt ordning
-            return registry;                                // Klart
+            AddBooking(registry, 10, 14);                   
+            return registry;                                
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace CarRental.Tests                                   // Alla tester ligge
             Assert.False(BookingSearch.HasOverlap(new List<Booking>(), P(1, 3))); // Då kan inget krocka
         }
 
-        [Theory]                                            // Samma test, flera fall
+        [Theory]                                            
         [InlineData(12, 16, true)]                          // Krockar med 10–14
         [InlineData(14, 20, false)]                         // Precis emellan, okej
         [InlineData(1, 30, true)]                           // Täcker allt
@@ -67,4 +67,25 @@ namespace CarRental.Tests                                   // Alla tester ligge
             Vehicle polo = new CompactCar("ABC123", "Polo"); // 395 kr
             Vehicle yaris = new CompactCar("BCD234", "Yaris"); // 395 kr, samma som Polo
             Vehicle v60 = new EstateCar("DEF456", "V60");   
-            List<Vehicle> list = new
+            List<Vehicle> list = new List<Vehicle> { van, polo, v60, yaris }; // Osorterat
+
+            VehicleSorter.SortByDailyRate(list);            // Act
+
+            Assert.Same(polo, list[0]);                     // Polo först (fanns före Yaris)
+            Assert.Same(yaris, list[1]);                    // Yaris sedan – stabil sortering
+            Assert.Same(v60, list[2]);                      // V60
+            Assert.Same(van, list[3]);                      // Skåpbilen sist
+        }
+
+        [Fact]
+        public void InsertionSort_EmptyAndSingle_DoNotCrash() // Edge cases
+        {
+            List<Vehicle> empty = new List<Vehicle>();      // Tom lista
+            VehicleSorter.SortByDailyRate(empty);           // Ska inte krascha
+            Assert.Empty(empty);                            // Fortfarande tom
+            List<Vehicle> one = new List<Vehicle> { car };  // En bil
+            VehicleSorter.SortByDailyRate(one);             // Ska inte krascha
+            Assert.Single(one);                             // Fortfarande en
+        }
+    }
+}

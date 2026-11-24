@@ -14,7 +14,7 @@ namespace CarRental.Pricing
             // Kollar om det inskickade objektet är tomt
             if (inner == null)
                 // Kastar ett fel direkt om inner är null
-                throw new ArgumentNullExepction("inner");
+                throw new ArgumentNullException("inner");
             // Sparar det inskickade objektet i vår privata variabel
             this.inner = inner;
         }

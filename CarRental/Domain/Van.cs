@@ -1,35 +1,23 @@
 ﻿namespace CarRental.Domain
 {
-    /// <summary>
-    /// Representerar en halvöppen hyrperiod [Start, End) och räknar ut dagar samt överlapp (Information Expert).
-    /// </summary>
-    public class RentalPeriod
+    // Skåpbil för flytt och transporter, ärver grundegenskaper från Vehicle
+    public class Van : Vehicle
     {
-        public DateTime Start { get; }
-        public DateTime End { get; }
-
-        public RentalPeriod(DateTime start, DateTime end)
+        // Skickar vidare regnummer och modell till basklassen för validering
+        public Van(string regNumber, string model)
+            : base(regNumber, model)
         {
-            if (end.Date <= start.Date)
-                throw new ArgumentException("Slutdatum måste vara efter startdatum (minst 1 dag).");
-
-            // .Date tar bort klockslaget så vi alltid räknar hela dagar
-            Start = start.Date;
-            End = end.Date;
         }
 
-        // Återlämningsdagen (End) räknas inte som hyrdag
-        public int Days { get { return (End - Start).Days; } }
+        // Sätter skåpbilens specifika värden
+        public override VehicleType Type { get { return VehicleType.Van; } }
+        public override string TypeName { get { return "Skåpbil"; } }
+        public override decimal DailyRate { get { return 695m; } }
+        public override int Seats { get { return 3; } }
 
-        // Kollar om två halvöppna intervall krockar (tillåter byte samma dag)
-        public bool Overlaps(RentalPeriod other)
+        public override string GetFeatures()
         {
-            return Start < other.End && other.Start < End;
-        }
-
-        public override string ToString()
-        {
-            return $"{Start:yyyy-MM-dd} – {End:yyyy-MM-dd} ({Days} dagar)";
+            return "Lastvolym ca 10 m³, B-körkort räcker.";
         }
     }
 }

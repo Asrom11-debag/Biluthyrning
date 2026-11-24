@@ -6,6 +6,7 @@ namespace CarRental.Pricing
     {
         // Fast dagspris på 50 kr (const = kan aldrig ändras, m = decimal)
         private const decimal PricePerDay = 50m;
+        private readonly int days;
         // Sparar antal dagar (readonly = sätts bara i konstruktorn
         // Konstruktor som skickar vidare inner till basklassen och tar emot antal dagar
         public ChildSeatAddOn(IRentalCost inner, int days) : base(inner)
@@ -13,6 +14,7 @@ namespace CarRental.Pricing
             // Sparar inskickat antal dagar i variabeln days
             this.days = days;
         }
+        
         // Skriver över namnet på tillägget från basklassen
         protected override string AddOnName { get { return "Barnstol"; } }
         // Räknar ut och returnerar kostnaden (dagspris gånger antal dagar)
@@ -21,14 +23,14 @@ namespace CarRental.Pricing
         protected override string GetPriceDetails() { return $"{days} dagar x {PricePerDay} kr"; }
     }
     // Klass för GPS-tillägg som ärver från AddOnDecorator
-    public class GspAddOn : AddOnDecorator
+    public class GpsAddOn : AddOnDecorator
     {
         // Fast dagspris på 40 kr
         private const decimal PricePerDay = 40m;
         // Sparar antal dagar för hyran
         private readonly int days;
         // Konstruktor som skickar inner till basklassen och tar emot dagar
-        public GspAddOn(IRentalCost inner, int days) : base(inner)
+        public GpsAddOn(IRentalCost inner, int days) : base(inner)
         {
             // Sparar antal dagar i fältet
             this.days = days;

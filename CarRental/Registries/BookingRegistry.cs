@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CarRental.Algorithms;                                 
+using CarRental.Domain;                                     
+using CarRental.Pricing;   
 
 namespace CarRental.Registries
 {
@@ -17,7 +17,7 @@ namespace CarRental.Registries
           public Booking CreateBooking(Customer customer, Vehicle vehicle, RentalPeriod period, IRentalCost cost)
           {
               Booking booking = new Booking(nextId, customer, vehicle, period, cost); // Skapa bookingen 
-              nextid++; 
+              nextId++; 
               
               bookingById.Add(booking.Id, booking); 
               
@@ -28,11 +28,16 @@ namespace CarRental.Registries
               return booking; 
           }
           
+          public bool IsVehicleAvailable(string regNumber, RentalPeriod period)
+          {
+              List<Booking> schedule = GetSchedule(regNumber); // Fordonets aktiva bokningar (sorterade)
+              return !BookingSearch.HasOverlap(schedule, period); 
+          }
           public Booking GetBooking(int bookingId)
           {
               if (! bookingById.ContainsKey(bookingId))
                   throw new KeyNotFoundException($"Hittar ingen booking nummer {bookingId}.");
-              return bookingsById[bookingId]; 
+              return bookingById[bookingId];   
           }    
           
               /// Avbokar: ändrar status och tar bort bokningen ur fordonets schema,
@@ -44,7 +49,7 @@ namespace CarRental.Registries
               Booking booking = GetBooking(bookingId);
               booking.Cancel();
               GetSchedule(booking.Vehicle.RegNumber).Remove(booking);
-              return bookinhg; 
+              return booking; 
               
           }
           
@@ -60,11 +65,16 @@ namespace CarRental.Registries
               return result;
           }
           
+          public List<Booking> GetActiveBookingsForVehicle(string regNumber)
+          {
+              return new List<Booking>(GetSchedule(regNumber)); 
+          }
+          
           private List<Booking> GetSchedule(string regNumber)
           {
               string key = regNumber.Trim().ToUpper();
-              if (!scheduleByVehicle.Containskey(key))
-                  scheduleByVehicle.Add(key, new List<Bookinhg>());
+              if (!scheduleByVehicle.ContainsKey(key))  
+                  scheduleByVehicle.Add(key, new List<Booking>());
               return scheduleByVehicle[key];
           }
     }

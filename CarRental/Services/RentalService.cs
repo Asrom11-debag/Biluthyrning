@@ -126,7 +126,7 @@ namespace CarRental.Services
         {
             customers.GetCustomer(customerId);              // Kontrollera att kunden finns (kastar annars fel)
             return bookings.GetBookingsForCustomer(customerId); 
-        } bokningarna
+        } 
 
         public List<Booking> GetActiveBookingsForVehicle(string regNumber) // Ett fordons schema
         {

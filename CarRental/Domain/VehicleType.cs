@@ -1,4 +1,5 @@
-﻿namespace CarRental.Domain
+﻿
+namespace CarRental.Domain
 {
     // <summary>    
     // De fordonstyper som firman hyr ut
@@ -7,7 +8,7 @@
     public enum VehicleType
     {
         Compact,    // kompaktbil
-        Esate,      // kombi
+        Estate,      // kombi
         Electric,   // elbil
         Van,        // skåpbil
     }

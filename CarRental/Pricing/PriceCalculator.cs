@@ -40,7 +40,6 @@ namespace CarRental.Pricing
                     // Kastar ett fel som säger att tillägget är okänt
                     throw new ArgumentException($"Okänt tillägg: {type}");
             }
-
         }
     }
 }
