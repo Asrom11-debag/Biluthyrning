@@ -7,8 +7,8 @@ namespace CarRental.Registries
     public class BookingRegisty
     {
         private readonly Dictionary<int, Booking> bookingById = new Dictionary<int, Booking>(); // id -> boking 
-        private readonly Dictionary<string, List<Booking>> scheduleByVehicle = new Dictionarystring, List<Booking>>(); // trgnr -> sorterat scheam 
-        private inte nextId = 1;       // Nästa lediga bokingsnumer 
+        private readonly Dictionary<string, List<Booking>> scheduleByVehicle = new Dictionary<string, List<Booking>>(); // trgnr -> sorterat scheam 
+        private int nextId = 1;       // Nästa lediga bokingsnumer 
         
         
           /// Skapar och sparar en ny bokning. Anroparen (RentalService) har redan
@@ -28,7 +28,7 @@ namespace CarRental.Registries
               return booking; 
           }
           
-          public NBooking GetBooking(int bookingId)
+          public Booking GetBooking(int bookingId)
           {
               if (! bookingById.ContainsKey(bookingId))
                   throw new KeyNotFoundException($"Hittar ingen booking nummer {bookingId}.");
@@ -41,9 +41,9 @@ namespace CarRental.Registries
               
           public Booking CancelBooking(int bookingId)
           {
-              Booking booking = GetBooking(bookingId) 
+              Booking booking = GetBooking(bookingId);
               booking.Cancel();
-              GetSchedule(booking.Vehicle.RegNumber).Remove(booking): 
+              GetSchedule(booking.Vehicle.RegNumber).Remove(booking);
               return bookinhg; 
               
           }
