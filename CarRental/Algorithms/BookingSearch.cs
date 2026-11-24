@@ -1,72 +1,48 @@
-﻿using CarRental.Domain;                                      // Behövs för Booking och RentalPeriod
+﻿using CarRental.Domain;
 
-namespace CarRental.Algorithms                              // Namnrymd för egna algoritmer
+namespace CarRental.Algorithms
 {
-    /// <summary>
-    /// ALGORITM: Binärsökning för att kontrollera dubbelbokning.
-    ///
-    /// Förutsättning: listan innehåller ETT fordons AKTIVA bokningar,
-    /// sorterade på startdatum, och bokningarna överlappar aldrig varandra
-    /// (det garanterar systemet). Då är även slutdatumen sorterade.
-    ///
-    /// Idé: hitta den sista bokningen som startar FÖRE den nya periodens slut.
-    /// Bara den bokningen kan krocka – alla tidigare slutar ännu tidigare,
-    /// och alla senare startar för sent.
-    ///
-    /// Tidskomplexitet: O(log n) i stället för O(n) för linjär sökning.
-    /// GRASP Pure Fabrication: en teknisk hjälpklass utan egen data.
-    /// </summary>
-    public static class BookingSearch                       // static = klassen har bara metoder, inga objekt skapas
+    // Binärsökning: kollar om en bil redan är bokad. O(log n).
+    public static class BookingSearch
     {
-        /// <summary>
-        /// Binärsökning ("lower bound"): returnerar index för den första
-        /// bokningen vars startdatum är &gt;= date. Om ingen finns: listans längd.
-        /// Samma index används när en ny bokning ska sättas in på rätt plats.
-        /// </summary>
+        // Index för första bokningen som startar på eller efter datumet.
         public static int FindFirstStartingOnOrAfter(List<Booking> sortedBookings, DateTime date)
         {
-            int low = 0;                                    // Vänstra gränsen för sökområdet
-            int high = sortedBookings.Count;                // Högra gränsen (exklusive) – hela listan till att börja med
+            int low = 0;                                    // Början
+            int high = sortedBookings.Count;                // Slutet
 
-            while (low < high)                              // Så länge sökområdet inte är tomt
+            while (low < high)
             {
-                int mid = low + (high - low) / 2;           // Mitten av området (skrivs så för att undvika överflöd)
-                if (sortedBookings[mid].Period.Start < date) // Startar mitten-bokningen före datumet?
-                    low = mid + 1;                          // Ja -> svaret ligger till höger om mitten
+                int mid = low + (high - low) / 2;           // Mitten
+                if (sortedBookings[mid].Period.Start < date)
+                    low = mid + 1;                          // Sök till höger
                 else
-                    high = mid;                             // Nej -> svaret är mitten eller till vänster
+                    high = mid;                             // Sök till vänster
             }
 
-            return low;                                     // low == high: första positionen där Start >= date
+            return low;
         }
 
-        /// <summary>
-        /// Sant om den nya perioden krockar med någon bokning i listan. O(log n).
-        /// </summary>
+        // True om den nya perioden krockar med en bokning.
         public static bool HasOverlap(List<Booking> sortedBookings, RentalPeriod newPeriod)
         {
-            int index = FindFirstStartingOnOrAfter(sortedBookings, newPeriod.End); // Alla från index startar för sent för att krocka
-            if (index == 0)                                 // Ingen bokning startar före den nya periodens slut
-                return false;                               // -> ingen krock möjlig
+            int index = FindFirstStartingOnOrAfter(sortedBookings, newPeriod.End);
+            if (index == 0)                                 // Ingen startar före vårt slut
+                return false;
 
-            Booking candidate = sortedBookings[index - 1];  // Den sista bokningen som startar före vårt slut
-            return candidate.Period.End > newPeriod.Start;  // Krock om den slutar efter att vår period börjar
+            Booking candidate = sortedBookings[index - 1];  // Enda som kan krocka
+            return candidate.Period.End > newPeriod.Start;
         }
 
-        /// <summary>
-        /// Linjär sökning – det enkla alternativet. Går igenom alla bokningar. O(n).
-        /// Finns kvar för att jämföra mot binärsökningen i tester och demo.
-        /// </summary>
+        // Linjär sökning, O(n). Används för att jämföra.
         public static bool HasOverlapLinear(List<Booking> bookings, RentalPeriod newPeriod)
         {
-            foreach (Booking booking in bookings)           // Titta på varje bokning en i taget
+            foreach (Booking booking in bookings)
             {
-                if (booking.Period.Overlaps(newPeriod))     // Krockar den? (RentalPeriod är Information Expert)
-                    return true;                            // Ja -> klart, vi behöver inte leta mer
+                if (booking.Period.Overlaps(newPeriod))
+                    return true;
             }
-            return false;                                   // Ingen krockade
+            return false;
         }
     }
 }
-
-

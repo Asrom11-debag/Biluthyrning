@@ -1,51 +1,46 @@
-﻿using CarRental.Domain;                                      // Behövs för fordonsklasserna
+﻿using CarRental.Domain;
 
-namespace CarRental.Factories                               // Fabriker
+namespace CarRental.Factories
 {
-    // De fyra konkreta skaparna ligger i samma fil eftersom de är mycket små
-    // och ser likadana ut. Varje klass gör EN sak: skapar EN fordonstyp (SRP).
+    // En fabrik per biltyp.
 
-    /// <summary>Skapar kompaktbilar.</summary>
-    public class CompactCarCreator : VehicleCreator         // Ärver den abstrakta skaparen
+    public class CompactCarCreator : VehicleCreator
     {
-        public override VehicleType Type { get { return VehicleType.Compact; } } // Talar om vilken typ den skapar
+        public override VehicleType Type { get { return VehicleType.Compact; } }
 
-        protected override Vehicle CreateVehicle(string regNumber, string model) // Implementerar fabriksmetoden
+        protected override Vehicle CreateVehicle(string regNumber, string model)
         {
-            return new CompactCar(regNumber, model);        // Här – och bara här – skapas en CompactCar
+            return new CompactCar(regNumber, model);
         }
     }
 
-    /// <summary>Skapar kombibilar.</summary>
-    public class EstateCarCreator : VehicleCreator          // Ärver den abstrakta skaparen
+    public class EstateCarCreator : VehicleCreator
     {
-        public override VehicleType Type { get { return VehicleType.Estate; } } // Typen kombi
+        public override VehicleType Type { get { return VehicleType.Estate; } }
 
-        protected override Vehicle CreateVehicle(string regNumber, string model) // Fabriksmetoden
+        protected override Vehicle CreateVehicle(string regNumber, string model)
         {
-            return new EstateCar(regNumber, model);         // Skapar en kombi
+            return new EstateCar(regNumber, model);
         }
     }
 
-    /// <summary>Skapar elbilar.</summary>
-    public class ElectricCarCreator : VehicleCreator        // Ärver den abstrakta skaparen
+    public class ElectricCarCreator : VehicleCreator
     {
-        public override VehicleType Type { get { return VehicleType.Electric; } } // Typen elbil
+        public override VehicleType Type { get { return VehicleType.Electric; } }
 
-        protected override Vehicle CreateVehicle(string regNumber, string model) // Fabriksmetoden
+        protected override Vehicle CreateVehicle(string regNumber, string model)
         {
-            return new ElectricCar(regNumber, model);       // Skapar en elbil
+            return new ElectricCar(regNumber, model);
         }
     }
 
-    /// <summary>Skapar skåpbilar.</summary>
-    public class VanCreator : VehicleCreator                // Ärver den abstrakta skaparen
+    public class VanCreator : VehicleCreator
     {
-        public override VehicleType Type { get { return VehicleType.Van; } } // Typen skåpbil
+        public override VehicleType Type { get { return VehicleType.Van; } }
 
-        protected override Vehicle CreateVehicle(string regNumber, string model) // Fabriksmetoden
+        protected override Vehicle CreateVehicle(string regNumber, string model)
         {
-            return new Van(regNumber, model);               // Skapar en skåpbil
+            return new Van(regNumber, model);
         }
     }
 }
