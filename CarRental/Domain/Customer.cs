@@ -27,8 +27,10 @@ public class Customer
     {
         return $"Kund {Id}: {Name} ({Phone})";
     }
-}
-}
+ }
+
+
+
    
        
        
