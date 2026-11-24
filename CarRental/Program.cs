@@ -1,10 +1,20 @@
-﻿namespace CarRental
+﻿using System.Text;                                          // Behövs för Encoding (å, ä, ö i konsolen)
+using CarRental.Services;                                   
+using CarRental.UI;                                         
+
+namespace CarRental                                         
 {
-    internal class Program
+   
+    /// Startpunkt för programmet. Bygger ihop systemet och startar menyn.
+    
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)              // Main körs först när programmet startar
         {
-            Console.WriteLine("Hello, World!");
+            Console.OutputEncoding = Encoding.UTF8;         // Så att å, ä, ö och × visas rätt
+            RentalService service = SeedData.CreateService(withSampleData: true); 
+            ConsoleUI ui = new ConsoleUI(service);          
+            ui.Run();                                       // Starta huvudmenyn
         }
     }
 }
