@@ -1,4 +1,5 @@
-﻿using CarRental.Domain;
+﻿
+using CarRental.Domain;
 
 namespace CarRental.Algorithms
 {

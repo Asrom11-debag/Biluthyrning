@@ -1,4 +1,5 @@
-﻿namespace CarRental.Domain
+﻿
+namespace CarRental.Domain
 {
     /// <summary>
     /// Representerar en hyrperiod [Start, End) och sköter beräkningar av dagar och överlapp (Information Expert).

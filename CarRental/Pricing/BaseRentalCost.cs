@@ -14,7 +14,7 @@ namespace CarRental.Pricing
         private readonly IPricingStrategy strategy;
 
         // Konstruktor som tar emot fordon, hyresperiod och prisstrategi
-        public BaseRentalCost(decimal vehicle, RentalPeriod period, IPricingStrategy strategy)
+        public BaseRentalCost(Vehicle vehicle, RentalPeriod period, IPricingStrategy strategy)
         {
             // Kollar om värdet på vihicle är 0 eller mindre
             if (vehicle == null)
