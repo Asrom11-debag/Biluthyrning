@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarRental.Pricing
+﻿namespace CarRental.Pricing
 {
-    internal class IRentalCost
+    public interface IRentalCost
     {
+        decimal GetPrice();
+        string GetDescription();
+        
     }
 }
+
