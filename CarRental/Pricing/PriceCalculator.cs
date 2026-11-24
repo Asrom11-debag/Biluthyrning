@@ -18,14 +18,14 @@ namespace CarRental.Pricing
                 cost = WrapWithAddOn(cost, addOn, period.Days); // Steg 2: linda in det nuvarande priset i ett nytt tillägg
             }
 
-            return cost;)
+            return cost;
     }
 
         // Privat hjälpmetod som väljer rätt tilläggsklass och lägger den runt cost
-        private IRentalCost WrapWithAddOn(IRentalCost cost, AddOnType addOn, int days)
+        private static IRentalCost WrapWithAddOn(IRentalCost inner, AddOnType type, int days)
         {
             // Kollar vilken typ av tillägg som skickades in
-            switch (addOn)
+            switch (type)
             {
                 // Om tillägget är bilbarnstol
                 case AddOnType.ChildSeat:
@@ -34,7 +34,7 @@ namespace CarRental.Pricing
                 case AddOnType.Gps:
                     return new GpsAddOn(inner, days);
                 case AddOnType.ExtraDriver:
-                    return new ExtraDriverAddOn(cost, days);
+                    return new ExtraDriverAddOn(inner);
                 // Om inget av fallen ovan matchar
                 default:
                     // Kastar ett fel som säger att tillägget är okänt

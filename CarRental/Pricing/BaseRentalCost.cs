@@ -16,11 +16,11 @@ namespace CarRental.Pricing
         // Konstruktor som tar emot fordon, hyresperiod och prisstrategi
         public BaseRentalCost(decimal vehicle, RentalPeriod period, IPricingStrategy strategy)
         {
-            // Kollar om värdet på vihicle är 0 eller mindre
+            // Kollar om värdet på vehicle är 0 eller mindre
             if (vehicle == null)
                 // Kastar ett fel om värdet inte är giltigt
                 throw new ArgumentException("vehicle");
-            // Sparar inskickat värde i fältet vihicle
+            // Sparar inskickat värde i fältet vehicle
             this.vehicle = vehicle;
             // Kollar om period är tom (null)
             if (period == null)
@@ -47,7 +47,7 @@ namespace CarRental.Pricing
         public string GetDescription()
         {
             // Sätter ihop och returnerar en text med modell, regnummer, dagar, dagspris, prismodell och totalpris (med 2 decimaler)
-            return $"{vehicle.Model} ({vehicle.RegNumber}), {period.Days} dagar x {vehicle.DailyRate} kr, " + $"prismodell {strategy.Name}: {GetPrice():0.00} kr";
+            return $"{vehicle.Model} ({vehicle.RegNumber}), {period.Days} dagar * {vehicle.DailyRate} kr, " + $"prismodell {strategy.Name}: {GetPrice():0.00} kr";
         }
     }
 }
