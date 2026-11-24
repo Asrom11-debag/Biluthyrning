@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarRental.Domain
+﻿namespace CarRental.Domain
 {
-    internal class BookingStatus
+   ///<summary>
+   ///Representerar en boknings status. En enum används istället för State-mönsstret
+   ///eftersom systemet endast har två fasta lägen utan komplex övergångslogik
+   ///</summary>
+   public enum BookingStatus
     {
+        Active,
+        Cancelled
     }
 }
