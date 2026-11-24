@@ -1,10 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using System.Security.Cryptography.X509Certificates;
 
-namespace CarRental.Domain
+///<summary>
+/// Representerar en elbil.Ärver grundegenskaper från Vechicle (Arv).
+/// </summary>
+public class ElectricCar : Vehicle
 {
-    internal class Booking
-    {
-    }
+   // Skickar vidare renummer och modell till basklassen konstruktor för validering
+  public ElectricCar(string regNumber, string model) 
+     : base(regNumber, model)
+  {
+  }
+
+  /// Överskuggar (override) basklassens egenskaper med värden specifika för en elbil
+  public override VechileType Type { get { return VechileType.Electric; } } 
+  public override string TypeName {get {return "Elbil"; } }
+  public override decimal DailyRate { get { return 595m; } }
+  public override int seats{ get { return 5; } }
+        
+ 
+  //Polymorfism: Ger elbilen en egen implementation av Getfetures()
+  public override string GetFeatures()
+  {
+        return "Laddkabel ingår, räckvidd ca 400km.";
+  }
 }

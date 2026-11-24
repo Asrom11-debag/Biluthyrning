@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarRental.Pricing
+﻿namespace CarRental
 {
-    internal class AddOnType
+    public enum AddOnType
     {
+        ChildSeat,
+        GPS,
+        ExtraDrive
     }
 }
